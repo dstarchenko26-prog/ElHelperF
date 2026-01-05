@@ -57,6 +57,8 @@ function App() {
           const errorMessage = t(errorKey);
           alert(t(errorMessage));
         }
+        const newUrl = window.location.origin + window.location.pathname + window.location.hash;
+        window.history.replaceState({}, document.title, newUrl);
       }
     }
 
