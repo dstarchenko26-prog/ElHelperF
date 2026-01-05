@@ -168,7 +168,7 @@ const ProjectDetailsPage = () => {
             onClick={() => navigate(`/projects/${projectId}/create-calc`)} 
             className="px-6"
           >
-            {`+ ${t('projects.add_calculation')}`}
+            {`+ ${t('project.add_calculation')}`}
           </Button>
         </Row>
 
