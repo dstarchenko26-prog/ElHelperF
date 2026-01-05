@@ -12,7 +12,7 @@ import {
 } from '@/components/ui';
 
 
-const Avatar = ({ user, edit, onSwitchView }) => {
+const Avatar = ({ user, edit, onSwitchView, onRefresh }) => {
   const { t } = useTranslation();
 
   const [isUploading, setIsUploading] = useState(false);
@@ -38,6 +38,7 @@ const Avatar = ({ user, edit, onSwitchView }) => {
       setIsUploading(true);
       const response = await userService.uploadAvatar(formData); 
       setAvatarUrl (response.avatarUrl)
+      onRefresh()
     } catch (error) {
       const errorKey = getErrorKey(error)
       const errorMessage = t(errorKey);

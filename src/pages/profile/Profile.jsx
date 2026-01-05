@@ -73,7 +73,7 @@ const Profile = () => {
       <Heading variant="h2" className='mb-4'>{t('user.title')}</Heading>
       <Grid cols={{base: 1, lg: 3}} gap='lg'>
         <Col className="lg:col-span-1">
-          <AvatarCard user={profileUser} edit={edit} onSwitchView={setView}/>
+          <AvatarCard user={profileUser} edit={edit} onSwitchView={setView} onRefresh={async () => update(await userService.getProfile())}/>
         </Col>
 
         <Col className="lg:col-span-2">
