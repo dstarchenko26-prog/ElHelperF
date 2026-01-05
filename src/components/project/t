@@ -1,0 +1,111 @@
+
+
+            {/* Динамічні поля */}
+            <Col gap="lg">
+              {formula.parameters.map(param => (
+                <Row key={param.var} gap="md" align="end" className="relative">
+                  {/* Індикатор обчисленого поля */}
+                  {isCalculated(param.var) && (
+                    <div className="absolute -left-3 top-8 text-green-500 animate-pulse">
+                      <CheckCircle2 size={16} />
+                    </div>
+                  )}
+
+                  <div className="flex-1">
+                    <label className={`block text-sm font-medium mb-1.5 ${isCalculated(param.var) ? 'text-green-600' : 'text-gray-700 dark:text-gray-300'}`}>
+                      {param.label['uk']} (<span className="font-mono text-xs">{param.var}</span>)
+                    </label>
+                    <input
+                      type="number"
+                      className={`w-full px-4 py-2.5 rounded-xl border outline-none transition-all font-mono
+                        ${isCalculated(param.var) 
+                          ? 'bg-green-50 border-green-300 text-green-800 font-bold shadow-[0_0_10px_rgba(34,197,94,0.1)]' 
+                          : 'bg-white border-gray-200 focus:ring-2 focus:ring-blue-500'
+                        }`}
+                      placeholder={isCalculated(param.var) ? results[param.var].toFixed(4) : "Enter value..."}
+                      value={inputs[param.var] === undefined ? '' : inputs[param.var]}
+                      onChange={(e) => handleInputChange(param.var, e.target.value)}
+                      // Якщо поле обчислене, ми все одно дозволяємо вводити (це зіб'є розрахунок іншого поля)
+                    />
+                  </div>
+                  
+                  <div className="w-32">
+                    <Select 
+                      value={inputUnits[param.var] || ''} 
+                      onChange={(e) => handleUnitChange(param.var, e.target.value)}
+                    >
+                      {param.units.map(u => (
+                        <option key={u.name} value={u.name}>{u.name}</option>
+                      ))}
+                    </Select>
+                  </div>
+                </Row>
+              ))}
+            </Col>
+            
+            <div className="mt-6 text-xs text-gray-400 flex items-center gap-2">
+              <Info size={14} />
+              <span>Залиште одне поле порожнім, щоб система обчислила його автоматично.</span>
+            </div>
+          </Card>
+        </div>
+
+        {/* RIGHT COLUMN: RESULTS */}
+        <div className="flex-1 w-full lg:sticky lg:top-8 space-y-6">
+          <Card className={`p-6 border h-full transition-colors ${results ? 'border-blue-200 bg-blue-50/30' : 'border-dashed border-gray-200'}`}>
+            <Heading variant="h4" className="mb-6 flex items-center gap-2 text-gray-800">
+              <Zap size={20} className={results ? "text-yellow-500 fill-yellow-500" : "text-gray-300"} /> 
+              Результати
+            </Heading>
+            
+            {!results ? (
+              <div className="text-center py-10 text-gray-400">
+                <div className="mb-2">Введіть параметри зліва</div>
+                <div className="text-xs opacity-70">Результат з'явиться автоматично</div>
+              </div>
+            ) : (
+              <Col gap="md">
+                {Object.entries(results).map(([key, val]) => {
+                  const isKeyCalculated = isCalculated(key);
+                  // Знаходимо опис параметра (label)
+                  const paramDef = formula.parameters.find(p => p.var === key);
+                  const label = paramDef ? paramDef.label['uk'] : key;
+                  const unit = inputUnits[key] || (paramDef?.units?.[0]?.name || '');
+
+                  return (
+                    <div 
+                      key={key} 
+                      className={`p-4 rounded-xl border transition-all ${
+                        isKeyCalculated 
+                          ? 'bg-white shadow-md border-green-200 scale-105 ring-1 ring-green-100' 
+                          : 'bg-white/50 border-transparent opacity-80'
+                      }`}
+                    >
+                      <Row justify="between" align="start">
+                        <div>
+                          <div className="text-xs text-gray-500 mb-1">{label}</div>
+                          <div className={`text-2xl font-black font-mono ${isKeyCalculated ? 'text-green-600' : 'text-gray-700'}`}>
+                            {val < 0.001 || val > 10000 ? val.toExponential(3) : val.toFixed(4)} 
+                            <span className="text-base font-normal text-gray-400 ml-1">{unit}</span>
+                          </div>
+                        </div>
+                      </Row>
+
+                      {/* E24 Recommendation */}
+                      {stdResults && stdResults[key] && stdResults[key] !== val && (key.startsWith('R') || key.startsWith('C') || key.startsWith('L')) && (
+                        <div className="mt-3 pt-2 border-t border-gray-100 flex justify-between items-center">
+                          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Стандарт E24</span>
+                          <span className="font-mono font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded text-sm">
+                            {stdResults[key] < 0.001 || stdResults[key] > 10000 ? stdResults[key].toExponential(2) : stdResults[key]} {unit}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </Col>
+            )}
+          </Card>
+        </div>
+      </Row>
+    </div>
