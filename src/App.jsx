@@ -1,4 +1,9 @@
-import { Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
+import { getErrorKey } from './api/errorHandler';
+import { useAuth } from '@/context/AuthContext';
 
 import Layout from '@/components/layout/Layout';
 
@@ -31,7 +36,33 @@ import CalculatorManagment from '@/pages/admin/calc/CalculatorMenegment';
 import CreateCalculator from '@/pages/admin/calc/CreateCalculator';
 import AdminRequestManagment from '@/pages/admin/request/RequestManagment';
 
+
 function App() {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { loginWithJWT } = useAuth();
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    
+
+    const login = async (code) => {
+      if (code) {
+        try {
+          await loginWithJWT(code);
+          navigate('/profile', { replace: true });  
+        } catch (error) {
+          const errorKey = getErrorKey(error)
+          const errorMessage = t(errorKey);
+          alert(t(errorMessage));
+        }
+      }
+    }
+
+    login(code);
+  }, [navigate]);
+
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
