@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, HashRouter } from 'react-router-dom'
 
 import 'katex/dist/katex.min.css';
 
@@ -14,13 +14,13 @@ import '@/i18n'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Suspense fallback={<Loader />}>
-      <BrowserRouter>
+      <HashRouter>
         <AuthProvider>
           
           <App />
           
         </AuthProvider>
-      </BrowserRouter>
+      </HashRouter>
     </Suspense>
   </React.StrictMode>,
 )
