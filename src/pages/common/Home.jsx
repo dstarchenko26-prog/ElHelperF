@@ -61,7 +61,7 @@ const HomePage = () => {
             <Button size="lg" onClick={() => navigate('/projects')} leftIcon={<Calculator />}>
               {t('home.hero.cta_projects')}
             </Button>
-            <Button size="lg" variant="outline" onClick={() => navigate('/theory')} leftIcon={<BookOpen />}>
+            <Button size="lg" variant="outline" onClick={() => navigate('/wiki')} leftIcon={<BookOpen />}>
               {t('home.hero.cta_theory')}
             </Button>
           </div>
@@ -75,7 +75,7 @@ const HomePage = () => {
             icon={BookOpen}
             title={t('home.features.theory.title')}
             desc={t('home.features.theory.desc')}
-            onClick={() => navigate('/theory')}
+            onClick={() => navigate('/wiki')}
             colorClass="bg-emerald-100 text-emerald-600"
           />
           <FeatureCard 
@@ -89,7 +89,7 @@ const HomePage = () => {
             icon={Settings}
             title={t('home.features.management.title')}
             desc={t('home.features.management.desc')}
-            onClick={() => navigate('/management')}
+            onClick={() => navigate('/admin')}
             colorClass="bg-purple-100 text-purple-600"
           />
           <FeatureCard 
