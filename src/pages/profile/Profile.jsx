@@ -16,7 +16,7 @@ import StatCard from '@/components/profile/StatsCard'
 
 const Profile = () => {
   const { userId } = useParams();
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, setUser: update } = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -77,7 +77,7 @@ const Profile = () => {
         </Col>
 
         <Col className="lg:col-span-2">
-          {(view === 'info' && edit) && <InfoCard user={profileUser} onSwitchView={setView} onRefresh={() => loadData()} />}
+          {(view === 'info' && edit) && <InfoCard user={profileUser} onSwitchView={setView} onRefresh={async () => update(await userService.getProfile())} />}
           {(view === 'password' && edit) && <SecurityCard onSwitchView={setView}/>}
           {(view === 'admin' && edit) && <AdminRequest onSwitchView={setView}/>}
           {!edit && <StatCard user={profileUser}/>}
