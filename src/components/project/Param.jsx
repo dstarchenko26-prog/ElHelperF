@@ -101,7 +101,7 @@ const Param = ({
 
         {/* --- БЛОК СТАНДАРТИЗАЦІЇ --- */}
         {/* Показуємо, якщо це результат і є кращий стандарт */}
-        {isResult && displayStdValue !== null && Math.abs(displayStdValue - displayValue) > (displayValue * 0.005) && (
+        {isResult && displayStdValue !== null && Math.abs(displayStdValue - displayValue) > (displayValue * 0.0001) && (
           <div 
             className="group flex items-center gap-3 p-2 mt-1 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-900/50 cursor-pointer hover:bg-emerald-100 dark:hover:bg-emerald-900/40 transition-all animate-in fade-in slide-in-from-top-1"
             onClick={() => onChange(displayStdValue)} // При кліку записуємо стандарт у поле
